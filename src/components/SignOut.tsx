@@ -15,6 +15,11 @@ function signOutClickHandler(instance: IPublicClientApplication) {
 export function SignOutButton() {
   const { instance } = useMsal();
   return (
-    <button onClick={() => signOutClickHandler(instance)}>Sign Out</button>
+    <div
+      onClick={() => signOutClickHandler(instance)}
+      className="w-[100px] border-2 border-solid rounded-lg px-4 py-2 text-center cursor-pointer mx-auto"
+    >
+      Logout
+    </div>
   );
 }

@@ -4,17 +4,22 @@ import {
 } from "@azure/msal-browser";
 import { useMsal } from "@azure/msal-react";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createUser } from "../services";
+import { useStore } from "../utils/store";
 
 export function useAzureOauth() {
   const { instance, inProgress, accounts } = useMsal();
+  const [tokenAccquired, setTokenAccquired] = useState(false);
+
+  const setAccessToken = useStore((state) => state.setAccessToken);
+  const setAllMails = useStore((state) => state.setAllMails);
 
   const { mutate: createUserMutate, isPending } = useMutation({
     mutationFn: createUser,
     mutationKey: ["create-user"],
-    onSuccess: () => {
-      console.log("user created");
+    onSuccess: (res) => {
+      setAllMails(res.data);
     },
     onError: (err) => {
       console.log(err);
@@ -22,8 +27,17 @@ export function useAzureOauth() {
   });
 
   useEffect(() => {
+    if (!accounts?.[0]) return;
+    if (tokenAccquired) return;
+    if (!instance) return;
     const accessTokenRequest = {
-      scopes: ["user.read", "mail.send", "mail.readwrite"],
+      scopes: [
+        "user.read",
+        "mail.send",
+        "mail.readwrite",
+        "Subscription.Read.All",
+        "offline_access",
+      ],
       account: accounts?.[0],
     };
 
@@ -31,11 +45,11 @@ export function useAzureOauth() {
       instance
         .acquireTokenSilent(accessTokenRequest)
         .then(async (res) => {
+          setTokenAccquired(true);
           createUserMutate({
-            emailAddress: res.account.username,
-            accountId: res.account.localAccountId,
             accessToken: res.accessToken,
           });
+          setAccessToken(res.accessToken);
         })
         .catch((error) => {
           if (error instanceof InteractionRequiredAuthError) {

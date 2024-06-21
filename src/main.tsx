@@ -15,9 +15,9 @@ const config = {
 const publicClientApplication = new PublicClientApplication(config);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <MsalProvider instance={publicClientApplication}>
-      <App />
-    </MsalProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <MsalProvider instance={publicClientApplication}>
+    <App />
+  </MsalProvider>
+  // </React.StrictMode>
 );
