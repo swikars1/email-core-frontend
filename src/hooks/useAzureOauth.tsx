@@ -13,13 +13,15 @@ export function useAzureOauth() {
   const [tokenAccquired, setTokenAccquired] = useState(false);
 
   const setAccessToken = useStore((state) => state.setAccessToken);
-  const setAllMails = useStore((state) => state.setAllMails);
+  const setMails = useStore((state) => state.setMails);
+  const setMailFolders = useStore((state) => state.setMailFolders);
 
   const { mutate: createUserMutate, isPending } = useMutation({
     mutationFn: createUser,
     mutationKey: ["create-user"],
     onSuccess: (res) => {
-      setAllMails(res.data);
+      setMails(res.data.responseMails);
+      setMailFolders(res.data.mailFolders);
     },
     onError: (err) => {
       console.log(err);

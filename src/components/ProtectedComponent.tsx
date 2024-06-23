@@ -5,8 +5,9 @@ import { SignOutButton } from "./SignOut";
 import { useStore } from "../utils/store";
 import { useEffect } from "react";
 import { socket } from "../utils/socket";
+import { isEmpty } from "lodash";
 
-type EventMail = {
+export type EventMail = {
   id: string;
   subject: string;
   bodyPreview: string;
@@ -19,16 +20,21 @@ type EventMail = {
   };
   isRead: string;
   isDraft: string;
-  importance: string;
-  changeType: "created" | "updated";
+  flag: {
+    flagStatus: "flagged" | "notFlagged";
+  };
+  changeType: "created" | "updated" | "deleted";
+  mailFolderId: string;
 };
 
 export function ProtectedComponent() {
   const { accounts } = useMsal();
   const { isPending } = useAzureOauth();
   const mails = useStore((state) => state.mails);
+  const mailFolders = useStore((state) => state.mailFolders);
   const addMail = useStore((state) => state.addMail);
   const updateMail = useStore((state) => state.updateMail);
+  const deleteMail = useStore((state) => state.deleteMail);
 
   const setSocketed = useStore((state) => state.setSocketed);
   const socketed = useStore((state) => state.socketed);
@@ -71,22 +77,14 @@ export function ProtectedComponent() {
 
   useEffect(() => {
     socket.on(`newmail-${accounts?.[0]?.username}`, (payload: EventMail) => {
-      const mailData = {
-        id: payload.id,
-        isRead: payload.isRead,
-        isDraft: payload.isDraft,
-        subject: payload.subject,
-        bodyPreview: payload.bodyPreview,
-        sender: {
-          name: payload.from.emailAddress.name,
-          email: payload.from.emailAddress.address,
-        },
-      };
       if (payload.changeType === "created") {
-        addMail(mailData);
+        addMail(payload);
       }
       if (payload.changeType === "updated") {
-        updateMail(mailData);
+        updateMail(payload);
+      }
+      if (payload.changeType === "deleted") {
+        deleteMail(payload);
       }
       console.log("mail arrived", payload);
     });
@@ -106,7 +104,7 @@ export function ProtectedComponent() {
               socketed ? "connected." : "not connected."
             } `}
       </div>
-      <ul>
+      {/* <ul>
         <li>- emit socket events only to spefic client</li>
         <li>- inbox folder management</li>
         <li>
@@ -126,8 +124,10 @@ export function ProtectedComponent() {
         <li>- manage local expired subscriptions</li>
         <li>- create new subscriptions while login if old is expired</li>
         <li>- pagination for mails</li>
-      </ul>
-      {mails?.length > 0 ? <MailListing mails={mails} /> : null}
+      </ul> */}
+      {!isEmpty(mails) ? (
+        <MailListing mails={mails} mailFolders={mailFolders} />
+      ) : null}
       <SignOutButton />
     </div>
   );
