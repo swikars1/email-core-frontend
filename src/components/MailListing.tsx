@@ -1,19 +1,6 @@
-export function MailListing({
-  mails,
-}: {
-  mails: {
-    id: string;
-    isRead: string;
-    isDraft: string;
-    subject: string;
-    bodyPreview: string;
-    sender: {
-      name: string;
-      email: string;
-    };
-    userId: string;
-  }[];
-}) {
+import { TMail } from "../utils/store";
+
+export function MailListing({ mails }: { mails: TMail[] }) {
   // const emailsByFolder = useMemo(() => {
   //   return emails.reduce((acc: { [key: string]: Email[] }, email) => {
   //     if (!acc[email.folder]) {
