@@ -76,6 +76,13 @@ export function ProtectedComponent() {
   }, []);
 
   useEffect(() => {
+    socket.emit("register", accounts?.[0]?.username);
+    return () => {
+      socket.off("register");
+    };
+  }, []);
+
+  useEffect(() => {
     socket.on(`newmail-${accounts?.[0]?.username}`, (payload: EventMail) => {
       if (payload.changeType === "created") {
         addMail(payload);
@@ -104,27 +111,6 @@ export function ProtectedComponent() {
               socketed ? "connected." : "not connected."
             } `}
       </div>
-      {/* <ul>
-        <li>- emit socket events only to spefic client</li>
-        <li>- inbox folder management</li>
-        <li>
-          - frontend sync for moved emails, read/unread status, flags,
-          deletions, new emails
-        </li>
-        <li>- add only required mails fields to db</li>
-        <li>- update db after socket call</li>
-        <li>- authentication for socket calls</li>
-        <li>- code refactor and push to github, fix git user</li>
-        <li>- automatic elastic api key and key id in env</li>
-        <li>- add a process to update ngrok url in env</li>
-        <li>- write proper documentation for running it initially</li>
-        <li>- send for testing to friends</li>
-        <li>- refresh oauth token</li>
-        <li>- renew subscriptions</li>
-        <li>- manage local expired subscriptions</li>
-        <li>- create new subscriptions while login if old is expired</li>
-        <li>- pagination for mails</li>
-      </ul> */}
       {!isEmpty(mails) ? (
         <MailListing mails={mails} mailFolders={mailFolders} />
       ) : null}

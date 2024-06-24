@@ -8,7 +8,7 @@ const API = axios.create({
 export const createUser = async (params: { accessToken: string }) => {
   try {
     const { data } = await API.post(
-      "/create-user",
+      "/sync-mail",
       {},
       {
         headers: {
@@ -16,19 +16,6 @@ export const createUser = async (params: { accessToken: string }) => {
         },
       }
     );
-    return data;
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const getMails = async (params: { accessToken: string }) => {
-  try {
-    const { data } = await API.get("/mails", {
-      headers: {
-        token: params.accessToken,
-      },
-    });
     return data;
   } catch (err) {
     throw err;
