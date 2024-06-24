@@ -30,9 +30,7 @@ export function MailListing({
             <div
               key={email.id}
               className={`flex items-center gap-4 p-4 border rounded-lg ${
-                email.isRead
-                  ? "bg-background hover:bg-accent"
-                  : "bg-muted hover:bg-accent"
+                email.isRead ? "bg-[white]" : "bg-[#f5f5f5]"
               }`}
             >
               <div className="flex-1">
