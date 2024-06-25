@@ -4,6 +4,8 @@ Real-time Outlook Email Syncing
 
 React frontend for real-time Outlook email synchronization using OAuth, and Microsoft change notifications (webhooks).
 
+Make sure you setup backend repo first: https://github.com/swikars1/email-core-backend
+
 ## Getting Started
 
 ### Installation
@@ -20,4 +22,4 @@ React frontend for real-time Outlook email synchronization using OAuth, and Micr
 
    `npm run dev`
 
-3. Server will be on http://localhost:5173
+3. Server will be up on http://localhost:5173
