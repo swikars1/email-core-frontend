@@ -20,4 +20,4 @@ React frontend for real-time Outlook email synchronization using OAuth, and Micr
 
    `npm run dev`
 
-3. Server will be on `http://localhost:5173`
+3. Server will be on http://localhost:5173
