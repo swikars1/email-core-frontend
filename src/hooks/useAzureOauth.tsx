@@ -22,6 +22,7 @@ export function useAzureOauth() {
     onSuccess: (res) => {
       setMails(res.data.responseMails);
       setMailFolders(res.data.mailFolders);
+      sessionStorage.setItem("jwtToken", res.data.jwtToken);
     },
     onError: (err) => {
       console.log(err);

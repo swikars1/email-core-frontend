@@ -1,5 +1,4 @@
 import { io } from "socket.io-client";
-import { useStore } from "./store";
 
 // "undefined" means the URL will be computed from the `window.location` object
 const URL =
@@ -10,7 +9,7 @@ export const socket = io(URL!, {
   transports: ["websocket", "polling"],
   auth: (cb) => {
     cb({
-      token: useStore.getState().accessToken,
+      token: sessionStorage.getItem("jwtToken") || "",
     });
   },
 });
