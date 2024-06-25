@@ -52,6 +52,12 @@ export function ProtectedComponent() {
           : `Welcome, ${accounts?.[0]?.username}, you are ${
               socketed ? "connected." : "not connected."
             } `}
+
+        {`${
+          socketed
+            ? "Try read/unreading, flag/unflaging messages, delete or moving messages between the folders."
+            : ""
+        }`}
       </div>
       {!isEmpty(mails) ? (
         <MailListing mails={mails} mailFolders={mailFolders} />
